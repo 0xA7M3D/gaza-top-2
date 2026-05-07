@@ -4,24 +4,31 @@ import { useOutletContext } from "react-router-dom";
 export default function Popup_post() {
 
     const {open , setOpen} = useOutletContext();
-    const {data, setData} = useState("")
+    const [data1, setData] = useState("");
+    const [file, setFile] = useState(null);
     
-    
-    useEffect(()=>{
-        console.log(data);
-    },[data])
-    
-    console.log(open);
+
+    const handelValue = (e)=>{
+        setData(e.target.value);
+    }
+    const handelFile = (e)=>{
+        setFile(e.target.files[0]);
+        console.log(file);
+        
+    }
+
+
 
     function cerat_post() {
+        
         fetch("http://localhost:5000/api/creat_post", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({title:data})
+            body: JSON.stringify({title:data1})
         });
-        console.log("done: " , data);
+        console.log("done: " , data1);
         
     }
     
@@ -33,7 +40,7 @@ export default function Popup_post() {
            {/* <form  action="http://localhost:5000/api/creat_post" method="post"> */}
                 <div className="inputs flex flex-col w-full">
                     <div className="inp w-full">
-                        <textarea  className="w-full border border-gray-300/20 focus:outline-4 outline-purple-700/40 rounded-md p-2  resize-none" placeholder="Text Post" name="text_post" id=""></textarea>
+                        <textarea onChange={handelValue} value={data1}  className="w-full border border-gray-300/20 focus:outline-4 outline-purple-700/40 rounded-md p-2  resize-none" placeholder="Text Post" name="text_post" id=""></textarea>
                     </div>
                     <div className="inp w-full flex ">
                         <label className="w-full p-3 py-10  border-2 border-dashed border-gray-300/20 hover:border-gray-400 transition cursor-pointer" htmlFor="inp12">
@@ -41,7 +48,7 @@ export default function Popup_post() {
                                 <i className="fa fa-image text-5xl text-purple-500"></i>
                                 <p>Upload Image</p>
                             </div>
-                            <input onChange={(e)=>setData(e.target.value)} value={data} id="inp12" className="w-full hidden border border-gray-300 focus:outline-4 outline-purple-700/40 rounded-md" type="file" />
+                            <input onChange={handelFile}  id="inp12" className="w-full hidden border border-gray-300 focus:outline-4 outline-purple-700/40 rounded-md" type="file" />
                         </label>
                     </div>
                 </div>
