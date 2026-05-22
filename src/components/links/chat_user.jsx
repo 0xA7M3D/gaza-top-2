@@ -62,8 +62,8 @@ function ChatUser() {
         <div className="w-[46%] max-[640px]:w-[85%] max-[430px]:w-full ">
             {/* <h1 className="text-center text-5xl text-purple-500">Chat Link</h1> */}
             
-            <div className="chat flex-col  text-neutral-500 box border  border-purple-500/20 overflow-hidden  font-medium   rounded-2xl shadow-lg shadow-gray-950/30 sec_prof flex items-center">
-                <div className="top bg-black/20 backdrop-blur-lg w-full flex flex-col gap-3 p-3 pb-2 drop-shadow-md  ">
+            <div className="chat flex-col  text-neutral-500 box border  border-gray-800/75 overflow-hidden  font-medium   rounded-2xl shadow-lg shadow-gray-950/30 sec_prof flex items-center">
+                <div className="top   w-full flex flex-col gap-3 p-3 pb-2 drop-shadow-md  ">
 
                     <div className="title px-1 flex font-bold justify-between w-full items-center">
                         <div className="info_user flex items-center gap-4">
@@ -123,7 +123,7 @@ function ChatUser() {
   
 
 
-                        <div style={{ top: `${num.y}px`, left: `${num.x}px` }}  className={`list-menue absolute ${open ? "max-h-[200px]":"max-h-0"} transition-all flex-none bg-black/20 backdrop-blur-lg shadow-[0px_0px_20px] shadow-neutral-600/20 w-50 rounded-2xl overflow-hidden`}>
+                        <div style={{ top: `${num.y}px`, left: `${num.x}px` }}  className={`list-menue absolute ${open ? "max-h-[200px]":"max-h-0"} transition-all flex-none   shadow-[0px_0px_20px] shadow-neutral-600/20 w-50 rounded-2xl overflow-hidden`}>
                                 <ul>
                                     <li className='flex gap-5 items-center p-2 pl-4 px-3 w-full hover:bg-violet-500 hover:text-white hover:gap-3 active:bg-violet-500 active:text-white active:gap-3 text-neutral-500 group transition-all cursor-pointer '>
                                         <i className="fas fa-arrow-turn-up"></i>

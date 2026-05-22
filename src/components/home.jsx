@@ -106,6 +106,28 @@ function Home(){
                             </div>
                         </div>
                     </div>
+                    <div className="story-1 flex-none flex gap-2 after:absolute after:w-full after:h-full after:top-0 after:left-0  after:bg-linear-to-b after:from-[#0000007c] after:via-transparent after:to-[#0000007c]  relative rounded-xl w-[100px] h-[150px] overflow-hidden">
+                        <img className='w-auto h-full' src={q2} alt="" />
+                        <div className="text_all h-full w-full absolute z-[2] flex flex-col">
+                            <div className="img_prof w-7 h-7 m-2 border border-dashed rounded-full border-purple-400/40">
+                                <img className='rounded-full w-full h-full  ' src={q6} alt="" />
+                            </div>
+                            <div className="name_prof absolute bottom-0 flex w-full h-[50%] bg-linear-to-t from-black  to-transparent">
+                                <p className='self-end text-xs  font-normal p-2 text-white'>Ahmed Programmer</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="story-1 flex-none flex gap-2 after:absolute after:w-full after:h-full after:top-0 after:left-0  after:bg-linear-to-b after:from-[#0000007c] after:via-transparent after:to-[#0000007c]  relative rounded-xl w-[100px] h-[150px] overflow-hidden">
+                        <img className='w-auto h-full' src={q1} alt="" />
+                        <div className="text_all h-full w-full absolute z-[2] flex flex-col">
+                            <div className="img_prof w-7 h-7 m-2 border border-dashed rounded-full border-purple-400/40">
+                                <img className='rounded-full w-full h-full  ' src={q6} alt="" />
+                            </div>
+                            <div className="name_prof absolute bottom-0 flex w-full h-[50%] bg-linear-to-t from-black  to-transparent">
+                                <p className='self-end text-xs  font-normal p-2 text-white'>Ahmed Programmer</p>
+                            </div>
+                        </div>
+                    </div>
 
 
 
@@ -121,16 +143,16 @@ function Home(){
                 </div>
 
             </div>
-            <div className="creat_post px-2 w-full flex items-center bg-black/20 backdrop-blur-lg overflow-hidden rounded-2xl shadow-lg shadow-gray-800/30">
+            <div className="creat_post px-2 w-full flex items-center bg-black/20  overflow-hidden rounded-2xl shadow-lg shadow-gray-800/30">
                 <img className='w-10 h-10 rounded-full ' src={q6} alt="" />
                 <div className="inputs flex gap-2 h-full items-center w-full">
-                    <input className='w-full h-[80%] focus:outline-3 outline-purple-700/20 text-xs  rounded-4xl px-2 ' type="text" name="" id="" placeholder='Whrite Us Palestine..' />
+                    <input className='w-full h-[80%] text-gray-300 focus:outline-3 outline-purple-700/20 text-xs  rounded-4xl px-2 ' type="text" name="" id="" placeholder='Whrite Us Palestine..' />
                     <i className="fal fa-images"></i>
                     <button onClick={()=>setOpen(!open)} className='p-1 px-5 rounded-2xl cursor-pointer text-sm font-normal text-white  hover:bg-purple-500 bg-purple-500/90'>Post</button>
                 </div>
             </div>
             <div className="posts w-full">
-                <div className="post-1  bg-black/20 backdrop-blur-lg overflow-hidden rounded-2xl shadow-lg shadow-gray-900/30 w-full">
+                <div className="post-1  overflow-hidden rounded-2xl shadow-lg shadow-gray-900/30 w-full">
                     <div className="info-post flex items-center justify-between p-2 px-5">
                         <div className="lef flex items-center gap-3">
                             <div className="img w-12 h-12 rounded-full">

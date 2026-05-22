@@ -6,8 +6,8 @@ function Notifecations() {
     return (
         <div className="w-[46%]  max-[640px]:w-[85%] max-[430px]:w-full ">
             
-            <div className="notifecations flex-col  text-neutral-500 box border border-purple-500/20 overflow-hidden  font-medium   rounded-2xl shadow-lg shadow-gray-900/30 sec_prof flex items-center">
-                <div className="top bg-black/20 backdrop-blur-lg w-full flex flex-col gap-3 p-3 pb-2">
+            <div className="notifecations flex-col  text-neutral-500 box border border-gray-800/75 overflow-hidden  font-medium   rounded-2xl shadow-lg shadow-gray-900/30 sec_prof flex items-center">
+                <div className="top   w-full flex flex-col gap-3 p-3 pb-2">
 
                     <div className="title px-1 flex justify-between w-full items-center">
                         <p>Notifecations</p>
@@ -15,8 +15,8 @@ function Notifecations() {
                     </div>
 
                     <div className="links-notifec text-neutral-400/70 flex w-full justify-center">
-                        <div className="requests px-3">Requests</div>
                         <div className="all px-3 text-purple-400 relative after:w-full after:rounded-t-2xl after:h-[3px] after:absolute after:-bottom-2 after:left-0 after:bg-purple-500 ">All</div>
+                        <div className="requests px-3">Requests</div>
                         <div className="birthday px-3">Birthday</div>
                     </div>
 

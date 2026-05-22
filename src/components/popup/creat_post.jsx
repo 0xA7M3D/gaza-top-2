@@ -33,7 +33,7 @@ export default function Popup_post() {
     }
     
     return(
-        <div className={`popup ${open? "active":'dis-active'} transition-all fixed z-50 bg-[#0b011d]  flex flex-col items-center w-90 gap-5 shadow-2xl shadow-gray-300/15 p-5 rounded`}>
+        <div className={`popup ${open? "active":'dis-active'} transition-all fixed z-50 bg-gray-950  flex flex-col items-center w-90 gap-5 shadow-2xl shadow-gray-300/15 p-5 rounded -translate-1/2 top-1/2 left-1/2`}>
             <div className="title">
                 <p className="text-3xl py-3">Creat <span className="text-linear font-medium">Post Now</span></p>
             </div>
