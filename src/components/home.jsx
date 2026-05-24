@@ -1,8 +1,9 @@
-    import { useRef } from 'react';
+    import { useEffect, useRef, useState } from 'react';
 import img_1 from '../assets/1.jpg';
 import Popup_post from './popup/creat_post';
 import { useOutletContext } from 'react-router-dom';
-
+import { useContext } from "react";
+import { UserContext } from "../context/user_context";
 import q1 from '../assets/quran/q1.png';
 import q2 from '../assets/quran/q2.png';
 import q3 from '../assets/quran/q3.png';
@@ -11,7 +12,13 @@ import q5 from '../assets/quran/q5.png';
 import q6 from '../assets/quran/q6.png';
 
 function Home(){
+    const { user, loading } = useContext(UserContext);
+    const [ posts, setPosts ] = useState([]);
 
+    // console.log(loading?"loading":user[0].name);
+
+    
+    
     const ContRef = useRef(null);
     const {open,setOpen} = useOutletContext();
 
@@ -32,6 +39,20 @@ function Home(){
             ContRef.current.scrollLeft -= 100;
         }
     }
+
+
+    function get_posts(){
+        fetch("http://localhost:5000/posts")
+        .then(res=>res.json())
+        .then(data=>setPosts(data))
+        .catch(err=>console.log("Error Get Posts",err))
+        
+    }
+    
+
+    useEffect(()=>{
+        get_posts()
+    },[])
 
 
     return (
@@ -151,44 +172,50 @@ function Home(){
                     <button onClick={()=>setOpen(!open)} className='p-1 px-5 rounded-2xl cursor-pointer text-sm font-normal text-white  hover:bg-purple-500 bg-purple-500/90'>Post</button>
                 </div>
             </div>
-            <div className="posts w-full">
-                <div className="post-1  overflow-hidden rounded-2xl shadow-lg shadow-gray-900/30 w-full">
-                    <div className="info-post flex items-center justify-between p-2 px-5">
-                        <div className="lef flex items-center gap-3">
-                            <div className="img w-12 h-12 rounded-full">
-                                <img className='rounded-full w-full h-full' src={q6} alt="" />
-                            </div>
-                            <div className="text-inf ">
-                                <div className="Name font-medium">
-                                    <p>Ahmed Programmer</p>
+            <div className="posts w-full flex flex-col gap-5">
+                {
+                    
+                    posts?.map(post=>(
+                        
+                        <div className="post-1  overflow-hidden rounded-2xl shadow-lg shadow-gray-900/30 w-full">
+                            <div className="info-post flex items-center justify-between p-2 px-5">
+                                <div className="lef flex items-center gap-3">
+                                    <div className="img w-12 h-12 rounded-full">
+                                        <img className='rounded-full w-full h-full' src={q6} alt="" />
+                                    </div>
+                                    <div className="text-inf ">
+                                        <div className="Name font-medium">
+                                            <p>Ahmed Programmer</p>
+                                        </div>
+                                        <div className="date text-[11px] text-gray-400/70">
+                                            <p><span className='text-gray-600'>Created in:</span> {post.created_at}</p>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className="date text-xs text-gray-400/70">
-                                    <p>Today 10:22 Pm</p>
+
+                                <div className="rig">
+                                    <p className='font-snas font-bold text-3xl'>...</p>
+                                </div>
+                            </div>
+                            <div className="content_post text-center pt-3">
+                                <div className="text_post">
+                                    <p>"{post.text}"</p>
+                                </div>
+                                <div className="img_post flex items-center  w-full h-[200px] overflow-hidden rounded-2xl">
+                                    <img className='w-full h-auto opacity-50' src={`../../api/uploads/${post.image}`} alt="Error Get Image (:" />
+                                </div>
+                            </div>
+
+                            <div className="reacts">
+                                <div className="btns flex justify-between flex-row-reverse">
+                                    <button className='w-full text-center p-2 hover:bg-gray-900/70 active:bg-gray-900/70 transition text-purple-400 cursor-pointer '><i className="fa fa-hand-peace"></i></button>
+                                    <button className='w-full text-center p-2 hover:bg-gray-900/70 active:bg-gray-900/70 transition  cursor-pointer'><i className="fal fa-share"></i></button>
+                                    <button className='w-full text-center p-2 hover:bg-gray-900/70 active:bg-gray-900/70 transition  cursor-pointer'><i className="fal fa-comment"></i></button>
                                 </div>
                             </div>
                         </div>
-
-                        <div className="rig">
-                            <p className='font-snas font-bold text-3xl'>...</p>
-                        </div>
-                    </div>
-                    <div className="content_post text-center pt-3">
-                        <div className="text_post">
-                            <p>"Free Palestine"</p>
-                        </div>
-                        <div className="img_post flex items-center  w-full h-[200px] overflow-hidden rounded-2xl">
-                            <img className='w-full h-auto' src={q6} alt="" />
-                        </div>
-                    </div>
-
-                    <div className="reacts">
-                        <div className="btns flex justify-between flex-row-reverse">
-                            <button className='w-full text-center p-2 hover:bg-gray-900/70 active:bg-gray-900/70 transition text-purple-400 cursor-pointer '><i className="fa fa-hand-peace"></i></button>
-                            <button className='w-full text-center p-2 hover:bg-gray-900/70 active:bg-gray-900/70 transition  cursor-pointer'><i className="fal fa-share"></i></button>
-                            <button className='w-full text-center p-2 hover:bg-gray-900/70 active:bg-gray-900/70 transition  cursor-pointer'><i className="fal fa-comment"></i></button>
-                        </div>
-                    </div>
-                </div>
+                    ))
+                }
             </div>
         </div>
             

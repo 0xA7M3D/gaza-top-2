@@ -1,8 +1,14 @@
 import { Link, useLocation } from 'react-router-dom';
 import img1 from '../assets/1.jpg';
+import { useContext } from 'react';
+import { UserContext } from '../context/user_context';
 
 function Nav_Links(clicked) {
     // console.log(clicked);
+
+        const { user, loading } = useContext(UserContext);
+    
+        // console.log(loading?"loading":user[0].name);
 
     const link = useLocation(null);
     let active = 'group bg-linear-to-r to-[#9f9fca02] from-[#9f9fca1a] after:w-1 after:rounded-r-2xl after:h-full after:absolute after:top-0 after:left-0 after:bg-purple-500 relative active';
@@ -10,13 +16,13 @@ function Nav_Links(clicked) {
     
     return(
         <>
-        <div className={`nav_links relative select-none ${clicked.open ? 'max-[430px]:max-h-[515px]' : 'max-[430px]:max-h-0'}  transition-all max-[430px]:fixed max-[430px]:top-[70px] z-20 w-[27%] max-sm:w-[58.31px] overflow-hidden flex-none `}>
+        <div className={`nav_links relative select-none ${clicked.open ? 'max-[430px]:max-h-[515px]' : 'max-[430px]:max-h-0'}  transition-all max-[430px]:fixed max-[430px]:top-[70px] z-20 w-[27%] max-sm:w-[58.31px] flex-none `}>
             <div className="boxes flex flex-col gap-3 sticky top-0">
                 <div className="box   font-medium p-3 gap-5 rounded-2xl shadow-lg shadow-gray-800/30 sec_prof flex items-center ">
                     <img className='w-[37px] min-w-[37px]  h-[37px] border border-purple-300 rounded-full' src={img1} alt="" />
                     <div className="text">
-                        <p className="name text-gray-400">Ahmed</p>
-                        <p className="name text-gray-400 text-xs">@ahm</p>
+                        <p className="name text-gray-400">{loading?"Loading...":user[0].name}</p>
+                        <p className="name text-gray-400 text-xs">@{loading?"Loading...":user[0].user}</p>
                     </div>
                 </div>
                 <div className="box max-sm:!bg-gray-950/100 max-sm:!backdrop-blur-none   overflow-hidden rounded-2xl shadow-lg shadow-gray-800/30 sec_links">

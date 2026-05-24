@@ -10,15 +10,8 @@ function Layout() {
 
   const navigat = useNavigate();
   const cookie_logIn = Cookies.get("login");
-  const cookie_user = Cookies.get("user");
-  console.log(cookie_logIn);
-
   
-  // useEffect(()=>{
-  //   if(!cookie_logIn || cookie_logIn == undefined ){
-  //     navigat('/sign');
-  //   }
-  // },[])
+
 
   const [open, setOpen] = useState(false);
 

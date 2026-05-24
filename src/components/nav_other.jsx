@@ -18,7 +18,7 @@ function Nav_Other() {
                     <div onClick={()=>setopen(!open)}  className={`btn ${open ? 'bg-purple-300' : 'bg-white'} absolute top-16 right-2 hidden max-sm:flex box group hover:bg-purple-300 w-min transition cursor-pointer gap-7  p-4 px-4.5 rounded-2xl shadow-lg shadow-gray-200/30 items-center`}>
                         <i className={`fa fa-comment ${open ? 'text-white' : 'text-gray-400'} group-hover:text-white transition `}></i>
                     </div>
-                    <div className={`boxes ${open ? 'max-sm:max-h-[545px]' : 'max-sm:max-h-0'} overflow-hidden transition-all max-sm:absolute max-sm:flex-none right-6 top-32 z-20 flex flex-col gap-3`}>
+                    <div className={`boxes ${open ? 'max-sm:max-h-[545px]' : 'max-sm:max-h-0'} sticky top-20 overflow-hidden transition-all max-sm:absolute max-sm:flex-none right-6  z-20 flex flex-col gap-3`}>
 
               
                         <div className="box p-3    overflow-hidden rounded-2xl shadow-lg shadow-gray-800/30 max-sm:!bg-gray-950/100 max-sm:!backdrop-blur-none  sec_links">

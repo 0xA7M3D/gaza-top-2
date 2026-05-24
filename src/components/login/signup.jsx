@@ -20,15 +20,15 @@ function SignUp(){
     console.log(msg);
     },[msg])
 
-    function send(){
+    function send(e){
         // console.log(data_user);
-        
+            e.preventDefault();
             fetch("http://localhost:5000/signup",{
                 body: JSON.stringify(data_user),
                 method:"POST",
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
+                credentials:"include",
+                headers:{
+                    "Content-Type":"application/json"
                 },
             })
             .then(resp => resp.json())
@@ -37,7 +37,7 @@ function SignUp(){
                 Set_Msg(
                     {
                         error:data.error,
-                        msg:data.Errors_content
+                        msg:data.msg
                     }
                 );
             })
@@ -50,12 +50,12 @@ function SignUp(){
     return(
         <div className="relative">
              
-            <div className={`notefication2 absolute ${close? "-top-30":"-top-3"}  ${msg.error!=null? "-top-3": "-top-30"} transition-all rounded-lg text-neutral-800 -translate-1/2 left-1/2 z-40 w-[350px] bg-white shadow-lg shadow-neutral-300/20`}>
+            <div className={`notefication2 absolute ${close? "-top-30":"-top-3 border-b "}  ${msg.error!=null? "-top-3": "-top-30"} ${msg.error == false ? "border-green-400" :"border-red-400"} transition-all ease-out rounded-lg text-neutral-800 -translate-1/2 left-1/2 z-40 w-[450px] bg-gray-800 shadow-lg shadow-neutral-300/20`}>
                 <div className="flex justify-between p-3 py-4 items-center">
                     <div className="ll flex items-center gap-4">
                         {
                         msg.error == true?
-                        <i className="fa fa-exclamation-triangle text-xl text-red-600"></i>
+                        <i className="fa fa-exclamation-triangle text-xl text-red-400"></i>
                         :msg.error == false? <i className="fa fa-check-circle text-xl text-green-600"></i>
                         :
                         ""
@@ -84,7 +84,7 @@ function SignUp(){
                         <div className="inp-1 flex relative items-center flex-row">
                             <i className={`fa fa-user ${faucus.facus1 ? "text-violet-400":"text-gray-500"}`}></i>
                             <span className={`absolute -translate-1/2 ${faucus.facus1 ? "top-0 left-15 text-gray-700 text-sm":"top-1/2 left-14"} transition-all  text-gray-600 z-[1] `}> Name </span>
-                            <input onChange={(e)=>Set_data_user((provid)=>({...provid,user:e.target.value}))} onFocus={()=>SetFaucus((prev)=>({...prev,facus1:true}))} onBlur={(e)=> SetFaucus((prev)=> ({...prev,facus1: e.target.value?true:false}))} className={`w-full p-1 px-3 border-b ${faucus.facus1 ? "border-violet-500/40":"border-white/10"} outline-none relative z-[3] text-gray-300 pl-5`} type="text" />
+                            <input onChange={(e)=>Set_data_user((provid)=>({...provid,name:e.target.value}))} onFocus={()=>SetFaucus((prev)=>({...prev,facus1:true}))} onBlur={(e)=> SetFaucus((prev)=> ({...prev,facus1: e.target.value?true:false}))} className={`w-full p-1 px-3 border-b ${faucus.facus1 ? "border-violet-500/40":"border-white/10"} outline-none relative z-[3] text-gray-300 pl-5`} type="text" />
                         </div>
                         <div className="inp-1 flex relative items-center flex-row">
                             <i className={`fa fa-at ${faucus.facus2 ? "text-violet-400":"text-gray-500"}`}></i>
@@ -95,7 +95,7 @@ function SignUp(){
                             <i className={`fa fa-key ${faucus.facus3 ? "text-violet-400":"text-gray-500"}`}></i>
                             <span className={`absolute -translate-1/2 ${faucus.facus3 ? "top-0 left-16 text-gray-700 text-sm":"top-1/2 left-17"} transition-all  text-gray-600 z-[1] `}> Password </span>
                             <input onChange={(e)=>Set_data_user((provid)=>({...provid,pass:e.target.value}))} onFocus={()=>SetFaucus( (prev)=>({...prev, facus3:true}))} onBlur={(e)=> SetFaucus((prev)=> ({...prev,facus3:e.target.value ? true:false}))} className={`w-full p-1 px-3 border-b ${faucus.facus3 ? "border-violet-500/40":"border-white/10"} outline-none relative z-[3] text-gray-300 pl-5`} type={`${show?"text":"password"}`} />
-                            <i onClick={()=>{SetShow(!show)}} className={`far fa-eye${show ? "-slash":""} absolute cursor-pointer -translate-1/2 top-1/2 right-0 z-[4]`}></i>
+                            <i onClick={()=>{SetShow(!show)}} className={`far fa-eye${show ? "-slash":""} absolute cursor-pointer -translate-1/2 top-1/2 right-0 z-[4] text-gray-400`}></i>
                         
                         </div>
                     </div>
@@ -104,14 +104,14 @@ function SignUp(){
                     </div>
                 </form>
                 {/* <hr className="w-1/2 text-violet-400"/> */}
-                <div className="or flex items-center w-full text-neutral-900/10">
+                <div className="or flex items-center w-full text-neutral-100/5">
                     <hr className="w-full" />
-                    <p className="text-neutral-800 px-4">OR</p>
+                    <p className="text-neutral-200 px-4">OR</p>
                     <hr className="w-full" />
                 </div>
 
                 <Link to={'/sign'}>
-                    <p className="underline text-violet-900"> Login </p>
+                    <p className="underline text-violet-400 tracking-[2px] text-sm"> Login </p>
                 </Link>
 
 
