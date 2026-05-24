@@ -7,8 +7,8 @@ function Chat() {
         <div className="w-[46%] max-[640px]:w-[85%] max-[430px]:w-full ">
             {/* <h1 className="text-center text-5xl text-purple-500">Chat Link</h1> */}
             
-            <div className="chat flex-col  text-neutral-500 box border border-purple-500/20  backdrop-blur-lg overflow-hidden  font-medium   rounded-2xl shadow-lg shadow-gray-800/30 sec_prof flex items-center">
-                <div className="top bg-black/20 border-purple-500/20 w-full flex flex-col gap-3 p-3 pb-2">
+            <div className="chat flex-col  text-neutral-500 box border border-gray-800/75  backdrop-blur-lg overflow-hidden  font-medium   rounded-2xl shadow-lg shadow-gray-800/30 sec_prof flex items-center">
+                <div className="top  border-gray-800/75 w-full flex flex-col gap-3 p-3 pb-2">
 
                     <div className="title px-1 flex font-bold justify-between w-full items-center">
                         <p>Chats</p>

@@ -11,7 +11,7 @@ function Nav_Header(open1) {
         
         <div className="header sticky top-0 z-40 w-full justify-between bg-black/20 backdrop-blur-xl items-center flex p-2 py-3 mb-4 px-5 shadow-lg shadow-gray-600/10">
             <div onClick={()=>{open1.setOpen(!open1.open)}} className="btn_open text-xl cursor-pointer max-[430px]:flex hidden">
-                <i className="fa fa-bars text-neutral-700"></i>
+                <i className="fa fa-bars text-neutral-400"></i>
             </div>
             <div className="logo   text-purple-400 flex items-center gap-2 font-medium text-xl">
                 <i className="fab fa-angellist"></i>

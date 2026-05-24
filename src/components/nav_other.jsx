@@ -14,14 +14,14 @@ function Nav_Other() {
     return(
         <>
 
-            <div className="nav_other">
+            <div className={`nav_other min-sm:w-80 `}>
                     <div onClick={()=>setopen(!open)}  className={`btn ${open ? 'bg-purple-300' : 'bg-white'} absolute top-16 right-2 hidden max-sm:flex box group hover:bg-purple-300 w-min transition cursor-pointer gap-7  p-4 px-4.5 rounded-2xl shadow-lg shadow-gray-200/30 items-center`}>
                         <i className={`fa fa-comment ${open ? 'text-white' : 'text-gray-400'} group-hover:text-white transition `}></i>
                     </div>
-                    <div className={`boxes ${open ? 'max-sm:max-h-[545px]' : 'max-sm:max-h-0'} overflow-hidden transition-all max-sm:absolute max-sm:flex-none right-6 top-32 z-20 flex flex-col gap-3`}>
+                    <div className={`boxes ${open ? 'max-sm:max-h-[545px]' : 'max-sm:max-h-0'} sticky top-20 overflow-hidden transition-all max-sm:absolute max-sm:flex-none right-6  z-20 flex flex-col gap-3`}>
 
               
-                        <div className="box p-3 bg-black/20 backdrop-blur-lg  overflow-hidden rounded-2xl shadow-lg shadow-gray-800/30 sec_links">
+                        <div className="box p-3    overflow-hidden rounded-2xl shadow-lg shadow-gray-800/30 max-sm:!bg-gray-950/100 max-sm:!backdrop-blur-none  sec_links">
                             <div className="title_box pb-3 flex items-center justify-between">
                                 <div className="flex gap-2 items-center">
                                     <i className="fa text-gray-800 fa-comment"></i>
@@ -95,7 +95,7 @@ function Nav_Other() {
                                 <p className='text-gray-400   font-medium py-2 px-1'>Requests</p>
                             </div>
 
-                            <div className="box transition bg-black/20 backdrop-blur-lg  font-medium p-3 pb-1 mb-3  rounded-2xl shadow-lg shadow-gray-800/30 sec_prof  ">
+                            <div className="box transition  max-sm:!bg-gray-950/100 max-sm:!backdrop-blur-none  font-medium p-3 pb-1 mb-3  rounded-2xl shadow-lg shadow-gray-800/30 sec_prof  ">
                                 <div className=" gap-5 flex items-center">
                                     <img className='w-[40px] h-[40px] border border-purple-300 rounded-full' src={img1} alt="" />
                                     <div className="text">

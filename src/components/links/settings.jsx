@@ -2,8 +2,8 @@
 function Settings() {
     return (
         <div className="w-[46%] max-[640px]:w-[85%] max-[430px]:w-full ">
-            <div className="settings flex-col  text-neutral-500 box border border-purple-500/20 overflow-hidden  font-medium   rounded-2xl shadow-lg shadow-gray-900/30 sec_prof flex items-center">
-                <div className="top bg-black/20 backdrop-blur-lg w-full flex flex-col gap-3 p-3 pb-2">
+            <div className="settings flex-col  text-neutral-500 box border border-gray-800/75 overflow-hidden  font-medium   rounded-2xl shadow-lg shadow-gray-900/30 sec_prof flex items-center">
+                <div className="top   w-full flex flex-col gap-3 p-3 pb-2">
 
                     <div className="title px-1 flex justify-between w-full items-center">
                         <p>Settings</p>
