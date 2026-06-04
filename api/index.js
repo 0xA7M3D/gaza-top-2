@@ -279,7 +279,7 @@ app.post("/posts", upload.single("file"), (req,res)=>{
 
 
 app.get("/posts",(req,res)=>{
-    connection.query("SELECT * FROM posts",(err,result)=>{
+    connection.query("SELECT * FROM posts ORDER BY id DESC",(err,result)=>{
         if(err){
             res.status(400).json({
                 error:true,
@@ -305,53 +305,139 @@ app.get("/mylikes/:id",(req,res)=>{
         res.json(result)
     })
 })
+app.get("/likes/:idPost",(req,res)=>{
+    const idPost = req.params.idPost;
+    connection.query("SELECT COUNT(*) FROM likes WHERE idPost=?",[idPost],(err,result)=>{
+        if(err){
+            res.status(400).json({
+                error:true,
+                msg:"Error in Get likes count post",
+                content_error:err
+            })
+            return;
+        }
+        console.log(result);
+        res.json(result)
+    })
+})
 
 
 app.post("/like_post",(req,res)=>{
     const {idPost,idUser} = req.body;
     const que = "SELECT * FROM likes WHERE idPost=? AND idUser=?";
     connection.query(que,[idPost,idUser],(err,result)=>{
+
         if(result.length === 0){
-            const que_ins = "INSERT INTO likes (idPost,idUser) VALUES (?,?)";
+    
+            const que_ins =
+            "INSERT INTO likes (idPost,idUser) VALUES (?,?)";
+    
             connection.query(que_ins,[idPost,idUser],(err2,result2)=>{
+    
                 if(err2){
-                    res.status(400).json({
-                        error:true,
-                        msg:"Error put like",
-                        content_error:err2
-                    })
-                    return;
+                    return res.status(400).json({
+                        error:true
+                    });
                 }
-                res.status(200).json({
-                    error:false,
-                    msg:"Done add like :)",
-                    content_error:err2
-                })
+    
+                const update_sql =
+                "UPDATE posts SET likes_count = likes_count + 1 WHERE id = ?";
+    
+                connection.query(update_sql,[idPost],(err3)=>{
+    
+                    if(err3){
+                        return res.status(400).json({
+                            error:true
+                        });
+                    }
+    
+                    return res.status(200).json({
+                        error:false,
+                        like:true
+                    });
+    
+                });
+    
+            });
+    
+        }else{
+    
+            const que_del =
+            "DELETE FROM likes WHERE idUser=? AND idPost=?";
+    
+            connection.query(que_del,[idUser,idPost],(err2)=>{
+    
+                if(err2){
+                    return res.status(400).json({
+                        error:true
+                    });
+                }
+    
+                const update_sql =
+                "UPDATE posts SET likes_count = likes_count - 1 WHERE id = ?";
+    
+                connection.query(update_sql,[idPost],(err3)=>{
+    
+                    if(err3){
+                        return res.status(400).json({
+                            error:true
+                        });
+                    }
+    
+                    return res.status(200).json({
+                        error:false,
+                        like:false
+                    });
+    
+                });
+    
+            });
+    
+        }
+    
+    });
+
+})
+
+
+app.post('/comments',(req,res)=>{
+    const {idPost,idUser,comment} = req.body;
+    const sql = "INSERT INTO comments (idPost,idUser,comment) VALUES (?,?,?)";
+
+    connection.query(sql,[idPost,idUser,comment],(err,result)=>{
+        if(err){
+            res.status(400).json({
+                error:true,
+                msg:"Error creat comment",
+                content_error:err
             })
             return;
         }
 
-        const que_del = "DELETE FROM likes WHERE idUser=? AND idPost=?";
-        connection.query(que_del,[idUser,idPost],(err,result)=>{
-            if(err){
-                res.status(403).json({
-                    error:true,
-                    msg:"Error delete like (:",
-                    content_error:err
-                })
-                return;
-            }
-            res.status(200).json({
-                error:false,
-                msg:"Done remove your like ;)",
+        res.status(200).json({
+            error:false,
+            msg:"Done Send Comment ;)",
+        })
+ 
+    })
+})
+
+app.get("/comments/:idPost",(req,res)=>{
+    const idPost = req.params.idPost;
+
+    const sql = "SELECT * FROM comments WHERE idPost=? ORDER BY id DESC LIMIT 5 ";
+    connection.query(sql,[idPost],(err,result)=>{
+        if(err){
+            res.status(400).json({
+                error:true,
+                msg:"Error Get comments!",
                 content_error:err
             })
-        })
+            return;
+        }
 
-        
-
+        res.status(200).json(result);
     })
-
 })
 
 
