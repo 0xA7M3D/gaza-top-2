@@ -11,14 +11,19 @@ import q4 from '../assets/quran/q4.png';
 import q5 from '../assets/quran/q5.png';
 import q6 from '../assets/quran/q6.png';
 import heart from '../assets/heart.png';
-
+import like_sound from "../assets/sounds/like-1.mp3"
 function Home(){
     const { user, loading } = useContext(UserContext);
     const [ posts, setPosts ] = useState([]);
     const [ myLikes, setMyLikes ] = useState([]);
     const [likePost1,setLikePost1] = useState({idPost:0})
+    const [sendComment,setSendComment] = useState({idPost:null,idUser:null,comment:''})
+    const [comments,setComments] = useState([])
+    const [comments_open,setComments_open] = useState({open:false,idPost:null});
+
     // console.log(loading?"loading":user[0].name);
 
+    console.log(sendComment);
     
     
     const ContRef = useRef(null);
@@ -55,6 +60,23 @@ function Home(){
         .then(data=>setMyLikes(data))
         .catch(err=>console.log("Error Get your likes",err))
     }
+    function get_count_likes(idPost){
+        fetch(`http://localhost:5000/mylikes/${idPost}`)
+        .then(res=>res.json())
+        .then(data=>setMyLikes(data))
+        .catch(err=>console.log("Error Get your likes",err))
+    }
+    
+    function get_comments(idPost){
+        fetch(`http://localhost:5000/comments/${idPost}`)
+        .then(res=>res.json())
+        .then(data=>setComments(data))
+        .catch(err=>console.log("Error Get comments this post",err))
+
+        console.log(comments);
+        setComments_open({...comments_open,idPost:idPost,open:!comments_open.open})
+        
+    }
     
     
 
@@ -72,8 +94,34 @@ function Home(){
             body: JSON.stringify({idPost:id,idUser:user?.[0].id||null})
         })
         .then(res=>res.json())
-        .then(data=> {console.log(data); get_posts();get_my_likes()})
+        .then(data=> {
+            console.log(data);
+            get_posts();
+            get_my_likes()
+            // play_sound_like(data.like)
+            const mb = new Audio(like_sound);
+            if(data.like){
+                mb.play()
+            }
+            
+        })
         .catch(err=>console.log("Error add like",err))
+    }
+    function postComment(){
+        
+        fetch("http://localhost:5000/comments" , {
+            method:"POST",
+            credentials:"include",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body: JSON.stringify(sendComment)
+        })
+        .then(res=>res.json())
+        .then(data=> {
+            console.log(data);
+        })
+        .catch(err=>console.log("Error add comment",err))
     }
     
 
@@ -81,6 +129,10 @@ function Home(){
         get_posts()
         get_my_likes()
     },[user])
+
+    // function play_sound_like(like){
+     
+    // }
 
 
     return (
@@ -242,15 +294,22 @@ function Home(){
                                     <p>"{post.text}"</p>
                                 </div>
                                 <div className={`img_post ${post.image =="null" ?"hidden":''} flex items-center  w-full h-[200px] overflow-hidden rounded-2xl`}>
-                                    <img className='w-full h-auto opacity-50' src={post.image !="null" ? `../../api/uploads/${post.image}` :''} alt="Error Get Img (:" />
+                                    {
+                                        post.image != "null" &&
+                                        <img className='w-full h-auto opacity-50' src={post.image !="null" ? `../../api/uploads/${post.image}` :''} alt="Error Get Img (:" />
+                                    
+                                    } 
                                 </div>
                             </div>
 
                             <div className="reacts">
-                                <div className="btns flex justify-between flex-row-reverse">
+                                <div className="btns flex justify-between flex-row-reverse border-t border-gray-900">
                                     
                                     <button onClick={(e)=>{likePost(post.id)}} className={`w-full ${isLiked ? "text-purple-400 active_like" :''} relative  text-center p-2 hover:bg-gray-900/70 active:bg-gray-900/70 transition cursor-pointer `}>
-                                        <i className={`${isLiked ? "fas": 'fal'} fa-heart`}></i>
+                                        <div className="flex text-center justify-center items-center gap-2 flex-row-reverse">
+                                            <i className={`${isLiked ? "fas": 'fal'} fa-heart`}></i>
+                                            <p>{post.likes_count > 0 && post.likes_count}</p>
+                                        </div>
                                         <div className="effect-love">
                                             <img src={heart} alt="" />
                                             <img src={heart} alt="" />
@@ -258,8 +317,46 @@ function Home(){
                                             {/* <img src={heart} alt="" /> */}
                                         </div>
                                     </button>
-                                    <button className='w-full text-center p-2 hover:bg-gray-900/70 active:bg-gray-900/70 transition  cursor-pointer'><i className="fal fa-share"></i></button>
-                                    <button className='w-full text-center p-2 hover:bg-gray-900/70 active:bg-gray-900/70 transition  cursor-pointer'><i className="fal fa-comment"></i></button>
+                                    {/* <button className='w-full text-center p-2 hover:bg-gray-900/70 active:bg-gray-900/70 transition  cursor-pointer'><i className="fal fa-share"></i></button> */}
+                                    <button onClick={(e)=>{get_comments(post.id)}} className='w-full text-center p-2 hover:bg-gray-900/70 active:bg-gray-900/70 transition  cursor-pointer'><i className="fal fa-comment"></i></button>
+                                </div>
+                            </div>
+
+                            <div className={`comments-parent ${comments_open.idPost == post.id && comments_open.open?"active":'h-0'}`}>
+
+                                <div className="input-comment flex px-2 gap-2 items-center my-2">
+                                    <input onChange={(e)=>{setSendComment({...sendComment,comment:e.target.value,idPost:post.id,idUser:user?.[0].id})}} type="text" className='text-sm w-full border border-gray-800 p-1 px-2 rounded-lg focus:outline-4 outline-gray-800/50' placeholder='Comment now (:'/>
+                                    <button onClick={postComment} className='p-1 text-sm px-3 bg-purple-500 rounded-lg text-white cursor-pointer'>
+                                        send
+                                    </button>
+                                </div>
+
+
+                                <div className="line flex items-center">
+                                    <hr className='w-full h-px border-none bg-gray-800/80' />
+                                    <p className='px-5 text-gray-700 text-sm'>Comments</p>
+                                    <hr className='w-full h-px border-none bg-gray-800/80' />
+                                </div>
+                                <div className="comments-content flex flex-col gap-2 p-2 px-3">
+                                    
+                                    {
+                                        comments.map(comment=>{
+
+                                            if(comment.idPost == post.id){
+                                                return(
+                                                <div key={comment.id} className="comment-1 flex gap-2">
+                                                    <img src={img_1} className='w-7 h-7 rounded-full' alt="" />
+                                                    <div className="text-col">
+                                                        <div className="content-comment bg-linear-to-l from-gray-800 via-gray-900 to-gray-800 p-1 px-2 rounded-sm">
+                                                            <p className="name text-gray-500 text-sm">Ahmed dev</p>
+                                                            <p className='text-gray-400 text-xs'>{comment.comment}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                )
+                                            }
+                                        })
+                                    }
                                 </div>
                             </div>
                         </div>
