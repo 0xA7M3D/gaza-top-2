@@ -10,11 +10,13 @@ import q3 from '../assets/quran/q3.png';
 import q4 from '../assets/quran/q4.png';
 import q5 from '../assets/quran/q5.png';
 import q6 from '../assets/quran/q6.png';
+import heart from '../assets/heart.png';
 
 function Home(){
     const { user, loading } = useContext(UserContext);
     const [ posts, setPosts ] = useState([]);
-
+    const [ myLikes, setMyLikes ] = useState([]);
+    const [likePost1,setLikePost1] = useState({idPost:0})
     // console.log(loading?"loading":user[0].name);
 
     
@@ -23,7 +25,7 @@ function Home(){
     const {open,setOpen} = useOutletContext();
 
     function next_story(){
-        console.log(ContRef.current);
+        // console.log(ContRef.current);
         // if (ContRef.current) {
             
             ContRef.current?.scrollTo({
@@ -46,18 +48,48 @@ function Home(){
         .then(res=>res.json())
         .then(data=>setPosts(data))
         .catch(err=>console.log("Error Get Posts",err))
+    }
+    function get_my_likes(){
+        fetch(`http://localhost:5000/mylikes/${user?.[0].id}`)
+        .then(res=>res.json())
+        .then(data=>setMyLikes(data))
+        .catch(err=>console.log("Error Get your likes",err))
+    }
+    
+    
+
+    useEffect(()=>{
+        console.log(myLikes);
+    },[myLikes])
+    function likePost(id){
         
+        fetch("http://localhost:5000/like_post" , {
+            method:"POST",
+            credentials:"include",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body: JSON.stringify({idPost:id,idUser:user?.[0].id||null})
+        })
+        .then(res=>res.json())
+        .then(data=> {console.log(data); get_posts();get_my_likes()})
+        .catch(err=>console.log("Error add like",err))
     }
     
 
     useEffect(()=>{
         get_posts()
-    },[])
+        get_my_likes()
+    },[user])
 
 
     return (
         <div className="home w-[46%] max-[640px]:w-[85%] max-[430px]:w-full  text-neutral-500 p-3 max-sm:px-1 flex flex-col gap-4 items-center">
             
+
+            
+
+
             <Popup_post/>
             <div onClick={()=>setOpen(!open)} className={`bacg1 ${open?'':'hidden'} w-full h-full fixed top-0 left-0 bg-black/20 z-40 `}></div>
            
@@ -175,9 +207,17 @@ function Home(){
             <div className="posts w-full flex flex-col gap-5">
                 {
                     
-                    posts?.map(post=>(
+                    posts?.map(post=>{
                         
-                        <div className="post-1  overflow-hidden rounded-2xl shadow-lg shadow-gray-900/30 w-full">
+                        const isLiked = myLikes.some(
+                            like => like.idPost == post.id &&
+                            like.idUser == user?.[0].id
+                          );
+
+                        return(
+
+                        <div key={post.id} className="post-1  overflow-hidden rounded-2xl shadow-lg shadow-gray-900/30 w-full">
+                            
                             <div className="info-post flex items-center justify-between p-2 px-5">
                                 <div className="lef flex items-center gap-3">
                                     <div className="img w-12 h-12 rounded-full">
@@ -198,23 +238,33 @@ function Home(){
                                 </div>
                             </div>
                             <div className="content_post text-center pt-3">
-                                <div className="text_post">
+                                <div className={`text_post ${post.image =="null" ? "pb-2":''}`}>
                                     <p>"{post.text}"</p>
                                 </div>
-                                <div className="img_post flex items-center  w-full h-[200px] overflow-hidden rounded-2xl">
-                                    <img className='w-full h-auto opacity-50' src={`../../api/uploads/${post.image}`} alt="Error Get Image (:" />
+                                <div className={`img_post ${post.image =="null" ?"hidden":''} flex items-center  w-full h-[200px] overflow-hidden rounded-2xl`}>
+                                    <img className='w-full h-auto opacity-50' src={post.image !="null" ? `../../api/uploads/${post.image}` :''} alt="Error Get Img (:" />
                                 </div>
                             </div>
 
                             <div className="reacts">
                                 <div className="btns flex justify-between flex-row-reverse">
-                                    <button className='w-full text-center p-2 hover:bg-gray-900/70 active:bg-gray-900/70 transition text-purple-400 cursor-pointer '><i className="fa fa-hand-peace"></i></button>
+                                    
+                                    <button onClick={(e)=>{likePost(post.id)}} className={`w-full ${isLiked ? "text-purple-400 active_like" :''} relative  text-center p-2 hover:bg-gray-900/70 active:bg-gray-900/70 transition cursor-pointer `}>
+                                        <i className={`${isLiked ? "fas": 'fal'} fa-heart`}></i>
+                                        <div className="effect-love">
+                                            <img src={heart} alt="" />
+                                            <img src={heart} alt="" />
+                                            <img src={heart} alt="" />
+                                            {/* <img src={heart} alt="" /> */}
+                                        </div>
+                                    </button>
                                     <button className='w-full text-center p-2 hover:bg-gray-900/70 active:bg-gray-900/70 transition  cursor-pointer'><i className="fal fa-share"></i></button>
                                     <button className='w-full text-center p-2 hover:bg-gray-900/70 active:bg-gray-900/70 transition  cursor-pointer'><i className="fal fa-comment"></i></button>
                                 </div>
                             </div>
                         </div>
-                    ))
+                        )
+                    })
                 }
             </div>
         </div>
