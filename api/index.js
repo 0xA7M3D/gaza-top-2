@@ -244,7 +244,7 @@ app.post("/posts", upload.single("file"), (req,res)=>{
 
     const user_token = req.body.user_token;
     const title = req.body.title;
-    const image = req.file.filename;
+    const image = req.file?.filename || "null";
     console.log(image);
     const date = new Date().toLocaleDateString("en-US");
 
@@ -290,6 +290,68 @@ app.get("/posts",(req,res)=>{
         }
         res.json(result)
     })
+})
+app.get("/mylikes/:id",(req,res)=>{
+    const idUser = req.params.id;
+    connection.query("SELECT * FROM likes WHERE idUser=?",[idUser],(err,result)=>{
+        if(err){
+            res.status(400).json({
+                error:true,
+                msg:"Error in Get your likes posts",
+                content_error:err
+            })
+            return;
+        }
+        res.json(result)
+    })
+})
+
+
+app.post("/like_post",(req,res)=>{
+    const {idPost,idUser} = req.body;
+    const que = "SELECT * FROM likes WHERE idPost=? AND idUser=?";
+    connection.query(que,[idPost,idUser],(err,result)=>{
+        if(result.length === 0){
+            const que_ins = "INSERT INTO likes (idPost,idUser) VALUES (?,?)";
+            connection.query(que_ins,[idPost,idUser],(err2,result2)=>{
+                if(err2){
+                    res.status(400).json({
+                        error:true,
+                        msg:"Error put like",
+                        content_error:err2
+                    })
+                    return;
+                }
+                res.status(200).json({
+                    error:false,
+                    msg:"Done add like :)",
+                    content_error:err2
+                })
+            })
+            return;
+        }
+
+        const que_del = "DELETE FROM likes WHERE idUser=? AND idPost=?";
+        connection.query(que_del,[idUser,idPost],(err,result)=>{
+            if(err){
+                res.status(403).json({
+                    error:true,
+                    msg:"Error delete like (:",
+                    content_error:err
+                })
+                return;
+            }
+            res.status(200).json({
+                error:false,
+                msg:"Done remove your like ;)",
+                content_error:err
+            })
+        })
+
+        
+
+    })
+
 })
 
 
