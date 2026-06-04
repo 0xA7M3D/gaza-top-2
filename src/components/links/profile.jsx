@@ -9,7 +9,7 @@ function Profile() {
 
     const { user, loading } = useContext(UserContext);
 
-    // console.log(loading?"loading":user[0].name);
+    // console.log(loading?"loading":user?.[0].name||"error");
     return (
         <div className="w-[46%] max-[640px]:w-[85%]  max-[430px]:w-full flex flex-col gap-1">
             <div className="imges w-full relative ">
@@ -22,16 +22,16 @@ function Profile() {
             </div>
             <div className="texts mt-11 p-2">
                 <div className="name text-purple-500 font-bold text-2xl  w-full text-center ">
-                    <p>{loading?"Loading...":user[0].name}</p>
+                    <p>{loading?"Loading...":user?.[0].name||"error"}</p>
                 </div>
                 <div className="desic w-full text-center text-gray-600 text-sm pt-1">
-                    <p>{loading?"Loading...":user[0].bio}</p>
+                    <p>{loading?"Loading...":user?.[0].bio||"error"}</p>
                 </div>
             </div>
 
             <div className="folowers flex justify-between py-2 px-3">
-                <div className="folow flex flex-col gap-2 text-center text-gray-300/70"><p className='font-bold text-lg'>{loading?"Loading...":user[0].folowers}</p> <p className='text-gray-400/30'>Folow</p></div>
-                <div className="folowing flex flex-col gap-2 text-center text-gray-300/70"><p className='font-bold text-lg'>{loading?"Loading...":user[0].folowing}</p> <p className='text-gray-400/30'>Folowing</p></div>
+                <div className="folow flex flex-col gap-2 text-center text-gray-300/70"><p className='font-bold text-lg'>{loading?"Loading...":user?.[0].folowers||"0"}</p> <p className='text-gray-400/30'>Folow</p></div>
+                <div className="folowing flex flex-col gap-2 text-center text-gray-300/70"><p className='font-bold text-lg'>{loading?"Loading...":user?.[0].folowing||"0"}</p> <p className='text-gray-400/30'>Folowing</p></div>
                 <div className="posts flex flex-col gap-2 text-center text-gray-300/70"><p className='font-bold text-lg'>0</p> <p className='text-gray-400/30'>Posts</p></div>
             </div>
             <div className="buttons flex gap-3 justify-between pt-2">
