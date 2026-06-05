@@ -165,7 +165,7 @@ app.post("/login", async (req,res)=>{
             return;
         }
 
-        res.cookie("auth",token,{maxAge:900000})
+        res.cookie("auth",token,{maxAge:9000000000})
 
         console.log("\nLogin Done (: \n passHash: ",passHash,"\n");
         res.json({
@@ -178,8 +178,8 @@ app.post("/login", async (req,res)=>{
 
 
 // Get My Acount
-app.get("/my_acount/:auth",(req,res)=>{
-    const auth = req.params.auth;
+app.get("/my_acount",(req,res)=>{
+    const auth = req.cookies.auth;
     connection.query("SELECT * FROM users WHERE auth=?",[auth],(err,result)=>{
         if(err){
             res.json({
@@ -242,7 +242,7 @@ const upload = multer({ storage });
 // Creat post
 app.post("/posts", upload.single("file"), (req,res)=>{
 
-    const user_token = req.body.user_token;
+    const user_token = req.cookies.auth;
     const title = req.body.title;
     const image = req.file?.filename || "null";
     console.log(image);
@@ -439,6 +439,54 @@ app.get("/comments/:idPost",(req,res)=>{
         res.status(200).json(result);
     })
 })
+
+
+
+// search about acount with user account
+app.get("/acount/:user",(req,res)=>{
+    const user = req.params.user ;
+    const sql_search = "SELECT * from users WHERE user=?";
+    connection.query(sql_search,[user],(err,result)=>{
+        if(err){
+            res.status(400).json({
+                error:true,
+                msg:"Error get user account",
+                content_error:err
+            })
+            return;
+        }
+
+        if(result.length === 0){
+            res.status(302).json({
+                error:true,
+                msg:"user account not found !",
+            })
+            return;
+        }
+
+        res.status(200).json(result);
+    })
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 app.listen(5000,()=>{
