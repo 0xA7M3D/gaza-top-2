@@ -55,7 +55,7 @@ function Home(){
         .catch(err=>console.log("Error Get Posts",err))
     }
     function get_my_likes(){
-        fetch(`http://localhost:5000/mylikes/${user?.[0].id}`)
+        fetch(`http://localhost:5000/mylikes/${user?.[0]?.id}`)
         .then(res=>res.json())
         .then(data=>setMyLikes(data))
         .catch(err=>console.log("Error Get your likes",err))
@@ -120,6 +120,7 @@ function Home(){
         .then(res=>res.json())
         .then(data=> {
             console.log(data);
+            get_comments(sendComment.idPost)
         })
         .catch(err=>console.log("Error add comment",err))
     }
@@ -145,7 +146,7 @@ function Home(){
             <Popup_post/>
             <div onClick={()=>setOpen(!open)} className={`bacg1 ${open?'':'hidden'} w-full h-full fixed top-0 left-0 bg-black/20 z-40 `}></div>
            
-            <h1 className='text-cyan-500'> بسم الله  </h1>
+            <h1 className='text-pink-400 font-sans'> بسم الله  </h1>
             <div className="parent_storyes w-full relative rounded-2xl ">
                 <span className="flex rounded-l-2xl w-[30px] h-full z-[9] absolute top-0 left-0 bg-linear-to-r from-[#000000c2] to-transparent "></span>
                 <span className="flex rounded-r-2xl w-[30px] h-full z-[9] absolute top-0 right-0 bg-linear-to-l from-[#00000083] to-transparent "></span>
@@ -340,6 +341,8 @@ function Home(){
                                 <div className="comments-content flex flex-col gap-2 p-2 px-3">
                                     
                                     {
+                                        comments.length === 0 ?
+                                        <h3 className='text-center font-black text-gray-800'>No comments yet. comment now :)</h3> :
                                         comments.map(comment=>{
 
                                             if(comment.idPost == post.id){

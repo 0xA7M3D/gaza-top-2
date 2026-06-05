@@ -1,8 +1,25 @@
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import img1 from '../../assets/1.jpg';
+import { useState } from 'react';
 
 
 function Chat() {
+
+    const [focus,setFocus] = useState(false);
+    const [userSearch,setUserSearch] = useState();
+
+    
+    function search_user(user){
+        const user1 = user.replaceAll(" ","");
+        if(user1.length > 0){
+            fetch(`http://localhost:5000/acount/${user1}`)
+            .then(result => result.json())
+            .then(data=> {console.log(data);setUserSearch(data)})
+            .catch(err => console.log("Error in search this user:  ",err))
+        }
+    }
+
+
     return (
         <div className="w-[46%] max-[640px]:w-[85%] max-[430px]:w-full ">
             {/* <h1 className="text-center text-5xl text-purple-500">Chat Link</h1> */}
@@ -13,6 +30,39 @@ function Chat() {
                     <div className="title px-1 flex font-bold justify-between w-full items-center">
                         <p>Chats</p>
                         <i className="fal fa-comment"></i>
+                    </div>
+
+                    <div className="relative">
+                        <div className="inp-search flex items-center focus-within:outline-4 rounded-md border-gray-800 border outline-gray-800">
+                            <i className="fal fa-search px-2 text-sm"></i>
+                            <input onFocus={()=>setFocus(true)} onBlur={()=>setFocus(false)} onChange={(e)=>{search_user(e.target.value)}} className='w-full p-1 text-sm px-2 outline-none border-none' type="text" name="" id="" placeholder='Search with user acount'/>
+                        </div>
+
+                        <div className={`drop-down ${focus? "":"active"} z-30 bg-gray-800 absolute left-0 w-full p-2 shadow-gray-950 shadow-lg rounded-b-lg`}>
+                         {
+                            userSearch?.[0]?.['name'] ?
+                            <Link to={`/chatUser/${userSearch?.[0]?.['id']}`}>
+                                <div className="chat-1 w-full p-2 hover:bg-black/30  bg-neutral-0 cursor-pointer transition  px-3 flex items-center justify-between" >
+                                    <div className="lef flex items-center gap-4">
+                                        <div className="img flex-none w-10 h-10 relative">
+                                            <img className='w-full h-full rounded-full' src={img1} alt="" />
+                                        </div>
+
+                                        <div className="text-message">
+                                            <p className="name">{userSearch?.[0]?.['name']}</p>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </Link>
+
+                            :
+                            
+                            <h3 className='text-white/30 text-sm text-center'>Not Found account have this user</h3>
+                         }
+                        </div>
+
+
                     </div>
 
                     <div className="links-notifec text-neutral-400/70 flex w-full justify-center">
@@ -29,7 +79,7 @@ function Chat() {
 
                 <div className="link_all w-full">
                     <Link to="/chatUser/11">
-                        <div className="notefec-1 w-full p-2 hover:bg-black/30  bg-neutral-0 cursor-pointer transition  px-3 flex items-center justify-between" >
+                        <div className="chat-1 w-full p-2 hover:bg-black/30  bg-neutral-0 cursor-pointer transition  px-3 flex items-center justify-between" >
                             <div className="lef flex items-center gap-4">
                                 <div className="img flex-none w-16 h-16 relative">
                                     <img className='w-full h-full rounded-full' src={img1} alt="" />
@@ -49,7 +99,7 @@ function Chat() {
                         </div>
                     </Link>
                     <Link to="/chatUser/2">
-                        <div className="notefec-1  w-full p-2 hover:bg-black/30 bg-neutral-0 cursor-pointer transition  px-3 flex items-center justify-between" >
+                        <div className="chat-1  w-full p-2 hover:bg-black/30 bg-neutral-0 cursor-pointer transition  px-3 flex items-center justify-between" >
                             <div className="lef flex items-center gap-4">
                                 <div className="img flex-none w-16 h-16 ">
                                     <img className='w-full h-full rounded-full' src={img1} alt="" />
@@ -69,7 +119,7 @@ function Chat() {
                     </Link>
 
                     <Link to="/chatUser/4">
-                        <div className="notefec-1  w-full p-2 hover:bg-black/30 bg-neutral-0 cursor-pointer transition  px-3 flex items-center justify-between" >
+                        <div className="chat-1  w-full p-2 hover:bg-black/30 bg-neutral-0 cursor-pointer transition  px-3 flex items-center justify-between" >
                             <div className="lef flex items-center gap-4">
                                 <div className="img flex-none w-16 h-16 ">
                                     <img className='w-full h-full rounded-full' src={img1} alt="" />

@@ -21,8 +21,8 @@ function Nav_Links(clicked) {
                 <div className="box   font-medium p-3 gap-5 rounded-2xl shadow-lg shadow-gray-800/30 sec_prof flex items-center ">
                     <img className='w-[37px] min-w-[37px]  h-[37px] border border-purple-300 rounded-full' src={img1} alt="" />
                     <div className="text">
-                        <p className="name text-gray-400">{loading?"Loading...":user?.[0].name||"Error"}</p>
-                        <p className="name text-gray-400 text-xs">@{loading?"Loading...":user?.[0].user||"error"}</p>
+                        <p className="name text-gray-400">{loading?"Loading...":user?.[0]?.name||"Error"}</p>
+                        <p className="name text-gray-400 text-xs">@{loading?"Loading...":user?.[0]?.user||"error"}</p>
                     </div>
                 </div>
                 <div className="box max-sm:!bg-gray-950/100 max-sm:!backdrop-blur-none   overflow-hidden rounded-2xl shadow-lg shadow-gray-800/30 sec_links">

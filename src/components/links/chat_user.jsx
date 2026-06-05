@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import img1 from '../../assets/1.jpg';
 import { useState } from 'react';
 
@@ -6,6 +6,13 @@ import { useState } from 'react';
 function ChatUser() {
     const [num , SetNum] = useState({x:0 , y:0 , id:null});
     const [open , SetOpen] = useState(false);
+    
+    const {id} = useParams();
+
+    
+    function sendMsg(content){
+        fetch("")
+    }
 
     window.onclick = ()=>{
         SetOpen(false);

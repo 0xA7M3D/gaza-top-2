@@ -6,7 +6,7 @@ export default function Popup_post() {
     const {open , setOpen} = useOutletContext();
     const [data1, setData] = useState(
         {
-            user_token:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYWhtZWQiLCJpYXQiOjE3Nzk2MzEzNjIsImV4cCI6MTc4MDIzNjE2Mn0.14MKURuegHbtXQrw2FCjMLHU54rOn0D1AEoO-3aD1HM',
+            // user_token:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYWhtZWQiLCJpYXQiOjE3Nzk2MzEzNjIsImV4cCI6MTc4MDIzNjE2Mn0.14MKURuegHbtXQrw2FCjMLHU54rOn0D1AEoO-3aD1HM',
             title:'',
             file:'',
         }
@@ -36,6 +36,7 @@ export default function Popup_post() {
         
         fetch("http://localhost:5000/posts", {
             method: "POST",
+            credentials: "include",
             // headers: {
             //     "Content-Type": "application/json",
             // },
