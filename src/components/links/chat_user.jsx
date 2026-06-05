@@ -1,17 +1,36 @@
 import { Link, useParams } from 'react-router-dom';
 import img1 from '../../assets/1.jpg';
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { UserContext } from '../../context/user_context';
 
 
 function ChatUser() {
+    const { user, loading } = useContext(UserContext);
     const [num , SetNum] = useState({x:0 , y:0 , id:null});
     const [open , SetOpen] = useState(false);
+    const [msgSend,setMsgSend] = useState("")
     
     const {id} = useParams();
 
     
-    function sendMsg(content){
-        fetch("")
+    function sendMsg(){
+        console.log(msgSend);
+        fetch("http://localhost:5000/msg",{
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body: JSON.stringify({
+                idMe:user?.[0]?.id,
+                idUser:id,
+                msg:msgSend
+            })
+        })
+
+        .then(res=>res.json())
+        .then(data=> console.log(data))
+        .catch(err=> console.log("Error Send Message:  ",err))
+
     }
 
     window.onclick = ()=>{
@@ -168,9 +187,9 @@ function ChatUser() {
                             {/* <i className="far fa-"></i> */}
                         </div>
                         <div className="input flex items-center w-full ">
-                            <textarea className='resize-none text-white/80 w-full p-2 border border-neutral-300/10 rounded-lg rounded-r-none border-r-neutral-300/10 h-11 focus:outline-2 outline-violet-500/30' name="msg" id="" placeholder='Message...'></textarea>
+                            <textarea onChange={(e)=>{setMsgSend(e.target.value)}} className='resize-none text-white/80 w-full p-2 border border-neutral-300/10 rounded-lg rounded-r-none border-r-neutral-300/10 h-11 focus:outline-2 outline-violet-500/30' name="msg" id="" placeholder='Message...'></textarea>
                         </div>
-                        <div className="send flex justify-center pr-1 items-center group shadow hover:bg-violet-500 hover:rounded-l-none active:bg-violet-500 active:rounded-l-none text-white cursor-pointer rounded-full transition-all flex-none w-11 h-11 ">
+                        <div onClick={sendMsg} className="send flex justify-center pr-1 items-center group shadow hover:bg-violet-500 hover:rounded-l-none active:bg-violet-500 active:rounded-l-none text-white cursor-pointer rounded-full transition-all flex-none w-11 h-11 ">
                             <i className="fa fa-paper-plane text-violet-500 transition group-hover:text-white group-active:text-white"></i>
                         </div>
                     </div>
