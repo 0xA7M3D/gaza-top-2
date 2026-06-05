@@ -401,6 +401,19 @@ body,html{
   height: auto;
   transform: translate(0,0);
   opacity: 1;
+}
 
 
+.drop-down.active{
+  animation: anim122 .1s forwards;
+  display: block;
+}
+
+@keyframes anim122 {
+  0%{
+    display: block;
+  }
+  100%{
+    display: none;
+  }
 }
