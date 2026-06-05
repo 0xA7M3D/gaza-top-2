@@ -470,7 +470,29 @@ app.get("/acount/:user",(req,res)=>{
 
 
 
+// send message
 
+app.post("/msg",(req,res)=>{
+    const {idMe,idUser,msg} = req.body;
+    const date = new Date();
+    const now = date.toLocaleDateString()
+    const sql_msg = "INSERT INTO chat (user_id,my_id,msg,band,created_in) VALUES (?,?,?,?,?)";
+    connection.query(sql_msg,[idUser,idMe,msg,'',now],(err,result)=>{
+        if(err){
+            res.status(400).json({
+                error:true,
+                msg:"Error send message",
+                content_error:err
+            })
+            return;
+        }
+
+        res.status(200).json({
+            error:false,
+            msg:"Done Send Message",
+        })
+    })
+})
 
 
 
