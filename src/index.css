@@ -383,3 +383,24 @@ body,html{
     transform: translate(0,-30px);
   }
 }
+
+
+
+
+.comments-parent{
+  height: 0;
+  max-height: 200px;
+  overflow-y: auto;
+  visibility: collapse;
+  transition: .3s ease;
+  transform: translate(0,-20px);
+  opacity: 0;
+}
+.comments-parent.active{
+  visibility: visible;
+  height: auto;
+  transform: translate(0,0);
+  opacity: 1;
+
+
+}
