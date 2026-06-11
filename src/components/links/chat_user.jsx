@@ -8,11 +8,24 @@ function ChatUser() {
     const { user, loading } = useContext(UserContext);
     const [num , SetNum] = useState({x:0 , y:0 , id:null});
     const [open , SetOpen] = useState(false);
-    const [msgSend,setMsgSend] = useState("")
+    const [msgSend,setMsgSend] = useState("");
+    const [messages,setMessages] = useState([]);
     
     const {id} = useParams();
 
-    
+    // Get Messages 
+    function getMessages(){
+        fetch(`http://localhost:5000/msg/${id}/${user?.[0]?.id}`)
+        .then(res => res.json())
+        .then(data => setMessages(data))
+        .catch(err => console.log("Error Get Messages:  \n",err))
+    }
+
+    useEffect(()=>{
+        getMessages()
+    },[user,id])
+
+    // Send Message 
     function sendMsg(){
         console.log(msgSend);
         fetch("http://localhost:5000/msg",{
@@ -122,7 +135,36 @@ function ChatUser() {
 
                     <div className="msgs flex flex-col gap-2 p-2 pt-4 px-3 h-[300px] overflow-y-auto overflow-x-hidden relative">
 
-                        <div onContextMenu={(e)=> {open_list_menue(e, 1 /** id Message Here */)}} className="msg_you w-fit">
+                        {
+                            messages.map(msg=>{
+                                
+                                let classN = 'me';
+                                if(msg.my_id == user?.[0]?.id){
+                                    classN = "me";
+                                }
+                                else if(msg.user_id == id){
+                                    classN = "you";
+                                }
+                                else{
+                                    classN = "someone";
+                                }
+
+                                return(
+                                <div onContextMenu={(e)=> {open_list_menue(e, 2 /** id Message Here */)}} className={`msg_me w-fit ${classN == "me"? "ml-auto" : ''}`}>
+                                    <div className={`text-msg p-2 px-3 ${classN == "me"?"bg-violet-500": classN == "you"?"bg-black/40":"bg-gray-800" }  rounded-xl rounded-br-none`}>
+                                        <p className='text-neutral-100'> {msg.msg} </p>
+                                        <div className="date h-2 -translate-y-0.5 flex justify-between text-white/70 font-light  text-[10px]   pr-1 text-end">
+                                            <p className='px-1'><i className="fal fa-clock"></i> {msg.created_in} </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                )
+                            })
+
+                        }
+
+
+                        {/* <div onContextMenu={(e)=> {open_list_menue(e, 1)}} className="msg_you w-fit">
                             <div className="text-msg p-2 px-3 bg-black/40 rounded-xl rounded-bl-none">
                                 <p className='text-neutral-400'> Assalamu Alikom My Friend  </p>
                                 <div className="date h-3 -translate-y-0 text-neutral-500 font-light  text-[10px]   pr-1 text-end">
@@ -130,20 +172,8 @@ function ChatUser() {
                                 </div>
                             </div>
                           
-                        </div>
-                        <div onContextMenu={(e)=> {open_list_menue(e, 2 /** id Message Here */)}} className="msg_me w-fit ml-auto">
-                            <div className="text-msg p-2 px-3 bg-violet-500 rounded-xl rounded-br-none">
-                                <p className='text-neutral-100'> Walikom Asalam My Brother </p>
-                                <div className="date h-2 -translate-y-0.5 flex justify-between text-white/70 font-light  text-[10px]   pr-1 text-end">
-                                    <p className=''><i className="fal fa-clock"></i> 4:13 PM </p>
-                                    <div className="sended">
-                                        {/* <i className="fal fa-thumbs-up"></i> */}
-                                        <i className="fa fa-check text-violet-700/90"></i>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
+                        </div> */}
+                        
       
 
   
@@ -172,7 +202,7 @@ function ChatUser() {
                                         <p className=''>Delete</p>
                                     </li>
                                 </ul>
-                            </div>
+                        </div>
 
                     </div>
 

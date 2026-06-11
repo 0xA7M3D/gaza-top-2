@@ -417,3 +417,26 @@ body,html{
     display: none;
   }
 }
+
+
+.reacts-post{
+  @apply 
+  border border-gray-700/80 rounded-xl px-1
+  flex flex-row-reverse items-center bg-gray-950;
+  position: absolute;
+  transform: translate(-50%,-50%);
+  top: 20px; 
+  left: 50%;
+  box-shadow:0 1px 10px #5353538a;
+  transition: .150s;
+  opacity: 0;
+}
+.reacttion{
+  @apply p-2  text-lg text-gray-600/80 cursor-pointer hover:scale-110 hover:text-pink-400 transition
+}
+
+
+
+.reacts-post{
+  @apply group-hover:-top-6 group-hover:opacity-100
+}

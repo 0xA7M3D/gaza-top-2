@@ -494,6 +494,27 @@ app.post("/msg",(req,res)=>{
     })
 })
 
+// Get messages
+
+app.get("/msg/:idUser/:idMe",(req,res)=>{
+    const {idUser,idMe} = req.params;
+    const sqlMsg = 
+        "SELECT * FROM chat WHERE user_id=? AND my_id=? OR user_id=? AND my_id=?";
+
+    connection.query(sqlMsg,[idUser,idMe,idMe,idUser],(err,result)=>{
+        if(err){
+            res.status(400).json({
+                error:true,
+                msg:"Error Get Messages",
+                content_error:err
+            })
+            return;
+        }
+
+        res.json(result);
+    })
+
+})
 
 
 
