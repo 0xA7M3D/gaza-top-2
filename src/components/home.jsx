@@ -20,7 +20,7 @@ function Home(){
     const [sendComment,setSendComment] = useState({idPost:null,idUser:null,comment:''})
     const [comments,setComments] = useState([])
     const [comments_open,setComments_open] = useState({open:false,idPost:null});
-
+    const [reactionContent , setReactionContent] = useState({idPost:null,reaction:"fa-heart"});
     // console.log(loading?"loading":user[0].name);
 
     console.log(sendComment);
@@ -131,9 +131,12 @@ function Home(){
         get_my_likes()
     },[user])
 
-    // function play_sound_like(like){
-     
-    // }
+    function handel_reaction(e,postId){
+        setReactionContent((prov)=>{
+            return {...prov,idPost:postId,reaction:e.target.classList[1]}
+        });
+        console.log(e.target);
+    }
 
 
     return (
@@ -306,9 +309,9 @@ function Home(){
                             <div className="reacts">
                                 <div className="btns flex justify-between flex-row-reverse border-t border-gray-900">
                                     
-                                    <button onClick={(e)=>{likePost(post.id)}} className={`w-full ${isLiked ? "text-purple-400 active_like" :''} relative  text-center p-2 hover:bg-gray-900/70 active:bg-gray-900/70 transition cursor-pointer `}>
-                                        <div className="flex text-center justify-center items-center gap-2 flex-row-reverse">
-                                            <i className={`${isLiked ? "fas": 'fal'} fa-heart`}></i>
+                                    <button onClick={(e)=>{likePost(post.id)}} className={`w-full btn-like ${isLiked ? "text-purple-400 active_like " :''} relative group  text-center p-2 hover:bg-gray-900/70 active:bg-gray-900/70 transition cursor-pointer `}>
+                                        <div className="flex text-center justify-center items-center gap-2 flex-row-reverse relative">
+                                            <i className={`${isLiked ? "fas": 'fal'} ${reactionContent.idPost==post.id ?reactionContent.reaction:'fa-heart'}`}></i>
                                             <p>{post.likes_count > 0 && post.likes_count}</p>
                                         </div>
                                         <div className="effect-love">
@@ -316,6 +319,12 @@ function Home(){
                                             <img src={heart} alt="" />
                                             <img src={heart} alt="" />
                                             {/* <img src={heart} alt="" /> */}
+                                        </div>
+                                        <div className="reacts-post absolute">
+                                            <i onClick={(e)=>handel_reaction(e,post.id)} className="fa fa-heart reacttion"></i>
+                                            <i onClick={(e)=>handel_reaction(e,post.id)} className="fas fa-thumbs-up reacttion"></i>
+                                            <i onClick={(e)=>handel_reaction(e,post.id)} className="fas fa-face-angry reacttion"></i>
+                                            <i onClick={(e)=>handel_reaction(e,post.id)} className="fas fa-face-grin-squint-tears reacttion"></i>
                                         </div>
                                     </button>
                                     {/* <button className='w-full text-center p-2 hover:bg-gray-900/70 active:bg-gray-900/70 transition  cursor-pointer'><i className="fal fa-share"></i></button> */}
