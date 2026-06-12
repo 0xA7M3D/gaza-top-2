@@ -5,6 +5,8 @@ const bcrypt = require("bcrypt");
 const cookieParser = require('cookie-parser');
 const jwt = require("jsonwebtoken");
 const multer = require("multer");
+const {Server} = require("socket.io");
+const {createServer} = require("http");
 const connection = mysql.createConnection({
     host:"localhost",
     user:"root",
@@ -13,6 +15,30 @@ const connection = mysql.createConnection({
 })
 
 
+// Headers
+
+const app = express();
+app.use(cookieParser())
+app.use(express.json());
+app.use(cors({
+  origin: "http://localhost:5173",
+  credentials: true
+  
+}));
+const httpServer = createServer(app);
+
+const io = new Server(httpServer, {
+  cors: {
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST"],
+    credentials: true
+  },
+  allowEIO3: true
+});
+
+
+
+// connect with db sql
 connection.connect((err)=>{
     if(err){
         console.log("\x1b[31m%s\x1b[0m","Error Connect Db sql ):\n", err);
@@ -21,16 +47,8 @@ connection.connect((err)=>{
     console.log("\x1b[32m%s\x1b[0m","\n-- Connected With db sql done :)");
 })
 
-const app = express();
 
-app.use(express.urlencoded());
-app.use(cors({
-    origin:"http://localhost:5173",
-    credentials:true
-}));
 
-app.use(express.json());
-app.use(cookieParser()); 
 
 app.get("/",(req,res)=>{
     res.send("This Api For Gaza-Top");
@@ -199,6 +217,21 @@ app.get("/acounts",(req,res)=>{
             res.json({
                 error:true,
                 msg:"Error Get users"
+            })
+            return;
+        }
+        res.json(result)
+    })
+})
+
+// Get Acount
+app.get("/acounts/:id",(req,res)=>{
+    const id = req.params.id
+    connection.query("SELECT * FROM users WHERE id=?",[id],(err,result)=>{
+        if(err){
+            res.json({
+                error:true,
+                msg:"Error Get user"
             })
             return;
         }
@@ -520,18 +553,45 @@ app.get("/msg/:idUser/:idMe",(req,res)=>{
 
 
 
+// ======= Start socket io =======
 
+io.on("connection",(socket)=>{
+    console.log(socket.id);
 
+    socket.on("join_room",(room)=>{
+        socket.join(room)
+    })
 
+    socket.on("msgRoom",(msg)=>{
+        const date = new Date();
+        io.to(msg.room).emit("msgs_room",
+            {
+                my_id:msg.idSender,
+                user_id:msg.idReceive,
+                msg:msg.msg,
+                created_in:date.toLocaleDateString()
+            }
+        )
 
-
-
-
-
-
-
-
-
-app.listen(5000,()=>{
-    console.log("\x1b[32m%s\x1b[0m","Lisetining on Port 5000");
+        console.log("The Message is :\n",msg);
+    })
+    
 })
+
+
+
+
+
+
+
+
+
+
+httpServer.listen(5000, () => {
+    console.log("\x1b[32m%s\x1b[0m","Lisetining on Port 5000");
+    // console.log("SERVER IS RUNNING ON PORT 5001");
+  });
+
+// app.listen(5000,()=>{
+//     console.log("\x1b[32m%s\x1b[0m","Lisetining on Port 5000");
+// })
