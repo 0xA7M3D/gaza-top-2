@@ -1,4 +1,4 @@
-    import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import img_1 from '../assets/1.jpg';
 import Popup_post from './popup/creat_post';
 import { useOutletContext } from 'react-router-dom';
@@ -137,13 +137,13 @@ function Home(){
         });
         console.log(e.target);
     }
-
+    
 
     return (
         <div className="home w-[46%] max-[640px]:w-[85%] max-[430px]:w-full  text-neutral-500 p-3 max-sm:px-1 flex flex-col gap-4 items-center">
-            
 
-            
+
+
 
 
             <Popup_post/>
