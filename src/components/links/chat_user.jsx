@@ -1,8 +1,8 @@
 import { Link, useParams } from 'react-router-dom';
 import img1 from '../../assets/1.jpg';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { UserContext } from '../../context/user_context';
-
+import { socket } from '../../socket';
 
 function ChatUser() {
     const { user, loading } = useContext(UserContext);
@@ -10,9 +10,56 @@ function ChatUser() {
     const [open , SetOpen] = useState(false);
     const [msgSend,setMsgSend] = useState("");
     const [messages,setMessages] = useState([]);
-    
+    const [roomName , setRoomName] = useState("");
+    const refChat = useRef(null)
     const {id} = useParams();
+    const [dataUserReceive,setDataUserReceive] = useState();
 
+    function setNameRoom(){
+        const numberRoom = [Number(id),user?.[0]?.id].sort();
+        const nameRoom =  `chat-${numberRoom[0]}-${numberRoom[1]}`;
+        setRoomName(nameRoom)
+        socket.emit("join_room",nameRoom)
+        console.log(nameRoom);
+    }
+
+    // Get User 
+    function getUser(){
+        fetch("http://localhost:5000/acounts/88")
+        .then(data=> data.json())
+        .then(res=> {setDataUserReceive(res?.[0]) ;console.log(res)})
+        .catch(err=> console.log("Error Get User: \n",err))
+    }
+    
+    useEffect(()=>{
+        setNameRoom()
+    },[user?.[0]])
+
+function scrolBottom(){
+
+        const scrollHeight = refChat.current.scrollHeight;
+        console.log("ScrollHeight: ",scrollHeight);
+        
+        refChat.current.scrollTo({
+            top:scrollHeight
+        })
+    }
+    
+    useEffect(()=>{
+        scrolBottom()
+    },[messages])
+    useEffect(()=>{
+        getUser()
+        
+        const handler = (data)=>{
+            setMessages((prev)=> [...prev,data])
+            console.log(data);
+        }
+        socket.on("msgs_room",(handler))
+        return () => {
+            socket.off("msgs_room",handler);
+        };
+    },[])
     // Get Messages 
     function getMessages(){
         fetch(`http://localhost:5000/msg/${id}/${user?.[0]?.id}`)
@@ -44,6 +91,9 @@ function ChatUser() {
         .then(data=> console.log(data))
         .catch(err=> console.log("Error Send Message:  ",err))
 
+
+        socket.emit("msgRoom",{idSender:user?.[0].id,idReceive:Number(id),room:roomName,msg:msgSend})
+        
     }
 
     window.onclick = ()=>{
@@ -117,7 +167,7 @@ function ChatUser() {
                                 <span className='absolute top-[80%] left-[90%] -translate-1/2 w-4 border border-[#efeff6] h-4 flex justify-center items-center text-sm text-white rounded-full bg-purple-300'></span>
                             </div>
                             <div className="text_info">
-                                <p className='user_name'>Free Palestine</p>
+                                <p className='user_name'>{dataUserReceive?.name}</p>
                                 <p className='date text-xs font-medium text-neutral-400/60'>Last Seen 3 Minutes</p>
                             </div>
                         </div>
@@ -133,7 +183,7 @@ function ChatUser() {
 
                 <div className="message_all w-full ">
 
-                    <div className="msgs flex flex-col gap-2 p-2 pt-4 px-3 h-[300px] overflow-y-auto overflow-x-hidden relative">
+                    <div ref={refChat} className="msgs flex flex-col gap-2 p-2 pt-4 px-3 h-[300px] max-h-[300px] overflow-y-auto overflow-x-hidden relative">
 
                         {
                             messages.map(msg=>{
