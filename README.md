@@ -1,16 +1,9 @@
 # Gaza to 
 Its simble social media like facebook (; LoL
 ---
+run project
 
-for setup pakages
-```git
-npm i
-```
-sign to folder api
-```git
-cd api
-```
-install pakages node
+for setup pakages 
 ```git
 npm i
 ```
@@ -19,4 +12,11 @@ run project
 npm run dev
 ```
 
-
+sign to folder api
+```git
+cd api
+```
+install pakages node
+```git
+npm i
+```
